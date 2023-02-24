@@ -1,5 +1,5 @@
 # 咕谷の动漫图片下载BOT
-🔗一个具有RSS订阅Pixiv收藏和图片链接解析下载功能的Telegram机器人
+🔗一个可以推送Pixiv Twtter的图片到Telegeam频道的功能
 
 ## 具有以下功能
 - 基于RssHub订阅Pixiv收藏推送道
