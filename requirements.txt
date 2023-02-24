@@ -1,0 +1,5 @@
+pyyaml
+pixivpy3
+feedparser
+schedule
+loguru
