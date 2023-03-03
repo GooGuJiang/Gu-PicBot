@@ -62,7 +62,6 @@ def download_img(pixiv_id):
         path_original.append(f"{input_path}/{get_file_name(illust.meta_single_page['original_image_url'],'original')['file_name']}")
         api.download(illust.image_urls['large'],path=input_path,name=get_file_name(illust.image_urls['large'],'large')['file_name'])
         path_large.append(f"{input_path}/{get_file_name(illust.image_urls['large'],'large')['file_name']}")
-
     file_data={
         "id":illust.id,
         "title":illust.title,
@@ -83,6 +82,10 @@ def download_img(pixiv_id):
     #    file_name = f"{file_name_list[0]}_{i}.{file_name_list[1]}"
     #    print(file_name)
     #api.download(illust.image_urls['large'],path=f"{PIXIV_PATH}/{illust.id}/",name=f"{illust.id}_large.jpg")
+    try:
+        api.illust_bookmark_add(pixiv_id, restrict="public")
+    except Exception as e:
+        pass
     return file_data
 
 def make_tags(tags):
@@ -92,6 +95,6 @@ def make_tags(tags):
     return tag
 
 if __name__ == "__main__":
-    print(download_img(105640073))
+    print(download_img(105797544))
     #tag =  [{'name': 'オリジナル', 'translated_name': 'original'}, {'name': '女の子', 'translated_name': 'girl'}, {'name': '緑髪', 'translated_name': 'green hair'}, {'name': '天使', 'translated_name': 'angel'}, {'name': 'おっぱい', 'translated_name': 'breasts'}]
     #print(make_tags(tag))
