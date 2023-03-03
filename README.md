@@ -1,5 +1,5 @@
 # 咕谷の动漫图片下载BOT
-✏一个可以下载Pixiv和Twtter的图片上传到Telegeam频道的机器人
+✏ 这个机器人可以下载来自Pixiv和Twitter的图片，并将它们上传到Telegram频道。
 
 ## 具有以下功能
 - 基于RssHub订阅Pixiv收藏并推送
