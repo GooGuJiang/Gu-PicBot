@@ -6,7 +6,6 @@ import sys
 import schedule
 import threading
 import time
-import initialize
 from loguru import logger
 from pixiv import download_img, make_tags
 from rss import get_pixiv_rss
