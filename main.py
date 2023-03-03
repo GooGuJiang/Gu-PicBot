@@ -13,8 +13,6 @@ import telebot
 import time
 import twtter
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
-    initialize.init()
 
 try:
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
