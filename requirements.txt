@@ -3,3 +3,4 @@ pixivpy3
 feedparser
 schedule
 loguru
+pyTelegramBotAPI
