@@ -65,3 +65,28 @@ $ python3 main.py
 *   PROXY和PROXY\_OPEN参数用于启用和配置代理服务器，可选。
 *   BOT\_ADMIN参数用于配置机器人管理员，机器人管理员具有特殊权限，可对机器人进行管理操作。
 *   参数的值必须使用双引号包含起来，且必须与参数名之间用等号连接。
+
+## 🤖命令列表
+
+目前只能解析Pixiv和Twtter链接，更多功能陆续添加。
+
+## 🆕更多部署方式
+
+目前只有部署在Linux和Windows平台，Docker等部署方式后续添加。
+
+## ⁉️已知问题
+
+问题1:
+
+启动时候遇到下面这个问题怎么解决？
+```bash
+pixivpy3.utils.PixivError: requests POST https://oauth.secure.pixiv.net/auth/token error: Detected a Cloudflare version 2 Captcha challenge, This feature is not available in the opensource (free) version.
+```
+
+解决方案:
+
+请尝试重新启动几次试试，撞Cloudflare验证了，还是不行就更换IP。
+
+## 鸣谢
+
+Twtter图片下载的部分代码来自 [推特媒体文件下载工具]([https://github.com/Binaryify/NeteaseCloudMusicApi](https://github.com/mengzonefire/twitter-media-downloader))
