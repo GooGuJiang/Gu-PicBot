@@ -1,7 +1,7 @@
 <div align="center">
 <h1>✏咕谷の动漫图片下载BOT</h1>
 
-![]( https://ggj.moe/wp-content/uploads/2023/03/botimg.png  )
+![]( https://ggj.moe/wp-content/uploads/2023/03/botimg.webp  )
 
 <p>✏ 可以下载来自Pixiv和Twitter的图片，并将它们上传到Telegram频道。</p>
 </div>
@@ -13,6 +13,35 @@
 
 ## 🤔如何配置
 
+1. 确保 `python` 的版本为 `>=3.6.*` 以上
+
+2. 将本仓库 `clone` 到本地:
+
+```bash
+$ git clone https://github.com/GooGuJiang/Gu-Random-Image.git
+```
+
+3. 安装所需库
+
+```bash
+$ pip install -r requirements.txt
+```
+
+4. 初始化
+
+```bash
+$ pip install -r requirements.txt
+```
+
+5.填写配置文件
+
+
+6.运行
+
+```bash
+$ python3 main.py
+```
+
 ## ❤️配置说明
 
 以下是配置参数的详细说明：
@@ -21,7 +50,7 @@
 | --- | --- |
 | REFRESH\_TOKEN | 用于获取新的access\_token的刷新令牌 |
 | RSS\_URL | RSS订阅的URL |
-| BOT\_TOKEN | 机器人的唯一标识符 |
+| BOT\_TOKEN | Telegram机器人Token |
 | CHANNEL\_ID | 发送消息的频道或群组的唯一标识符 |
 | BOT\_ADMIN | 机器人管理员的用户ID列表 |
 | RSS\_SECOND | RSS更新检查的时间间隔（单位：秒） |
