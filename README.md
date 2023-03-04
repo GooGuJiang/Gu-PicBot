@@ -30,7 +30,7 @@ $ pip install -r requirements.txt
 4. 初始化
 
 ```bash
-$ pip install -r requirements.txt
+$ python3 main.py
 ```
 
 5.填写配置文件
