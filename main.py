@@ -141,8 +141,10 @@ def push_link(message):
                     if dl_img["status"] is False:
                         bot.reply_to(message,"下载图片出错请重新尝试!")
                         return None
-                    if dl_img["tw_tag"] is not None:
+                    if len(dl_img["tw_tag"]) >0:
                         taglink = f'\n标签: {twtter.make_tags(dl_img["tw_tag"])}'
+                    else:
+                        taglink = ""
                     push_text = f'''
 <b>{twtter.remove_twitter_links_and_tags(dl_img["tw_text"])}</b>
 推文作者: <a href="{dl_img["tw_user_url"]}">{dl_img["tw_user_name"]}</a>
