@@ -89,4 +89,4 @@ pixivpy3.utils.PixivError: requests POST https://oauth.secure.pixiv.net/auth/tok
 
 ## 鸣谢
 
-Twtter图片下载的部分代码来自 [推特媒体文件下载工具]([https://github.com/Binaryify/NeteaseCloudMusicApi](https://github.com/mengzonefire/twitter-media-downloader))
+Twtter图片下载的部分代码来自 [推特媒体文件下载工具](https://github.com/mengzonefire/twitter-media-downloader)
