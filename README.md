@@ -42,6 +42,10 @@ $ python3 main.py
 $ python3 main.py
 ```
 
+## 🤖命令列表
+
+目前只能解析Pixiv和Twtter链接，更多功能陆续添加。
+
 ## ❤️配置说明
 
 以下是配置参数的详细说明：
@@ -66,9 +70,6 @@ $ python3 main.py
 *   BOT\_ADMIN参数用于配置机器人管理员，机器人管理员具有特殊权限，可对机器人进行管理操作。
 *   参数的值必须使用双引号包含起来，且必须与参数名之间用等号连接。
 
-## 🤖命令列表
-
-目前只能解析Pixiv和Twtter链接，更多功能陆续添加。
 
 ## 🆕更多部署方式
 
@@ -76,16 +77,14 @@ $ python3 main.py
 
 ## ⁉️已知问题
 
-问题1:
-
-启动时候遇到下面这个问题怎么解决？
-```bash
-pixivpy3.utils.PixivError: requests POST https://oauth.secure.pixiv.net/auth/token error: Detected a Cloudflare version 2 Captcha challenge, This feature is not available in the opensource (free) version.
-```
-
+<details> 
+<summary> 
+启动时遇到<code>Cloudflare version 2 Captcha</code>
+</summary> 
 解决方案:
 
 请尝试重新启动几次试试，撞Cloudflare验证了，还是不行就更换IP。
+</details> 
 
 ## 鸣谢
 
