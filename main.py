@@ -99,7 +99,7 @@ def push_link(message):
         if message.from_user.id in config["BOT_ADMIN"]:
             if message.text.startswith("https://www.pixiv.net/artworks/"):
                 try:
-                    if pid_in_database(message.text.split("/")[-1]) is True:
+                    if is_pid_exist(message.text.split("/")[-1]) is True:
                         bot.reply_to(message, "已经推送过了!")
                         return None
                     temp = bot.reply_to(message, "正在推送中...")
