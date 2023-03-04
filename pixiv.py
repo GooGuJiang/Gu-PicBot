@@ -2,11 +2,15 @@ from pixivpy3 import *
 import yaml
 import sys
 import os
+import sqlite3
 
 
 #初始化目录
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv") is False:
     os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv")
+
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data") is False:
+    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data")
 
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
     sys.exit()
@@ -14,15 +18,58 @@ else:
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
-#配置
 PIXIV_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/pixiv"
+# Connect to the SQLite database
+PIXIV_DB = f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data/pixiv_images.db"
+if os.path.exists(PIXIV_DB) is False:
+    conn = sqlite3.connect(PIXIV_DB)
+    c = conn.cursor()
+    # Create the table to store image data (if it doesn't exist)
+    c.execute('''CREATE TABLE IF NOT EXISTS pixiv_images
+                (id INTEGER PRIMARY KEY,
+                pid INTEGER,
+                file_size INTEGER,
+                file_path TEXT)''')
+    conn.close()
+    
+# Define a function to insert image data into the database
+
+def get_folder_size(folder_path):
+    total_size = 0
+    for dirpath, dirnames, filenames in os.walk(folder_path):
+        for file in filenames:
+            file_path = os.path.join(dirpath, file)
+            total_size += os.path.getsize(file_path)
+    return total_size
+
+def insert_image_data(pid,img_path):
+    try:
+        conn = sqlite3.connect(PIXIV_DB)
+        c = conn.cursor()
+        c.execute('INSERT INTO pixiv_images (pid, file_size,file_path) VALUES (?, ?, ?)', (pid, get_folder_size(img_path),img_path))
+        conn.commit()
+        conn.close()
+        return True
+    except:
+        return False
+    
+def is_pid_exist(pid):
+    """Check if a given PID exists in the database."""
+    conn = sqlite3.connect(PIXIV_DB)
+    c = conn.cursor()
+    c.execute("SELECT pid FROM pixiv_images WHERE pid = ?", (pid,))
+    result = c.fetchone()
+    conn.close()
+    if result:
+        return True
+    else:
+        return False
 
 REFRESH_TOKEN = config['REFRESH_TOKEN']
 
 #初始化PixivPy
 api = AppPixivAPI()
 api.auth(refresh_token=REFRESH_TOKEN)
-
 
 
 def get_file_name(url,size):
@@ -75,6 +122,7 @@ def download_img(pixiv_id):
         "path_large":path_large,
         "path_original":path_original,
     }
+    
     #print(file_data)
     #os.mkdir(f"{PIXIV_PATH}/{illust.id}")
     #for i in illust.image_urls:
@@ -82,7 +130,9 @@ def download_img(pixiv_id):
     #    file_name = f"{file_name_list[0]}_{i}.{file_name_list[1]}"
     #    print(file_name)
     #api.download(illust.image_urls['large'],path=f"{PIXIV_PATH}/{illust.id}/",name=f"{illust.id}_large.jpg")
+    
     try:
+        insert_image_data(pixiv_id,f"{PIXIV_PATH}/{illust.id}")
         api.illust_bookmark_add(pixiv_id, restrict="public")
     except Exception as e:
         pass
@@ -95,6 +145,8 @@ def make_tags(tags):
     return tag
 
 if __name__ == "__main__":
-    print(download_img(105797544))
+    #print(download_img(105797544))
+    #print(is_pid_exist("105797544"))
     #tag =  [{'name': 'オリジナル', 'translated_name': 'original'}, {'name': '女の子', 'translated_name': 'girl'}, {'name': '緑髪', 'translated_name': 'green hair'}, {'name': '天使', 'translated_name': 'angel'}, {'name': 'おっぱい', 'translated_name': 'breasts'}]
     #print(make_tags(tag))
+    pass

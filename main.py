@@ -3,12 +3,11 @@ import traceback
 import yaml
 import os
 import sys
-import schedule
 import threading
 import time
 from loguru import logger
-from pixiv import download_img, make_tags
-from rss import get_pixiv_rss
+from pixiv import download_img, make_tags,is_pid_exist
+from rss import get_pixiv_rss,pid_in_database
 import telebot
 import time
 import twtter
@@ -38,6 +37,7 @@ def is_file_size_exceeds_limit(file_path: str, limit: int = 50 * 1024 * 1024) ->
     return file_size > limit
 
 def rss_push():
+    logger.info("开始执行RSS定时任务")
     try:
         rss_list = get_pixiv_rss()
         if rss_list is not None:
@@ -45,10 +45,10 @@ def rss_push():
             for rss in rss_list:
                 if rss is not None:
                     try:
-                        img_path = download_img(rss["pid"])
+                        if is_pid_exist(rss[1]) is True:
+                            continue
+                        img_path = download_img(rss[1])
                         #print(img_path)
-                        if str(rss["pid"]) in os.listdir(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv'):
-                            return None
                         if img_path is not None:
                             push_text = f'''
 <b>{img_path["title"]}</b>\n
@@ -56,10 +56,10 @@ def rss_push():
 作者: <a href="{img_path["anthor_url"]}">{img_path["author"]}</a>
 链接: <a href="{img_path["page_url"]}">🔗链接地址</a>
 标签: {make_tags(img_path["tags"])}
-'''
+        '''
                             with open(img_path["path_large"][0], 'rb') as img:
                                 push_data = bot.send_photo(config["CHANNEL_ID"], img, caption=f"{push_text}")
-                                logger.success(f"推送成功: {rss['title']}")
+                                logger.success(f"推送成功: {rss[1]}")
                             for push_photo in img_path["path_original"]:
                                 if is_file_size_exceeds_limit(push_photo):
                                     continue
@@ -71,21 +71,22 @@ def rss_push():
                             count_push=0
                         else:
                             time.sleep(1)                                
-                        
+                                
                     except Exception as e:
                         logger.error(f"推送失败: {e}")
     except Exception as e:
         logger.error(f"获取RSS失败: {e}")
         return None
 
-schedule.every(int(config["RSS_SECOND"])).seconds.do(rss_push)
+#schedule.every().seconds.do(rss_push)
 
 def run_schedule():
     while True:
-        schedule.run_pending()
-        time.sleep(1)
+        #schedule.run_pending()
+        rss_push()
+        time.sleep(int(config["RSS_SECOND"]))
 
-#调试用
+#schedule.run_pending()
 #rss_push()
 if config["RSS_OPEN"] == True:
     logger.info("RSS推送已开启")
@@ -98,8 +99,8 @@ def push_link(message):
         if message.from_user.id in config["BOT_ADMIN"]:
             if message.text.startswith("https://www.pixiv.net/artworks/"):
                 try:
-                    if str(message.text.split("/")[-1]) in os.listdir(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv'):
-                        bot.reply_to(message, "该图片已经推送过了")
+                    if pid_in_database(message.text.split("/")[-1]) is True:
+                        bot.reply_to(message, "已经推送过了!")
                         return None
                     temp = bot.reply_to(message, "正在推送中...")
                     img_path = download_img(message.text.split("/")[-1])

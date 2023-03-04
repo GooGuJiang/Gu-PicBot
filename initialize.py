@@ -21,7 +21,10 @@ if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is
             c.write(yaml.dump(data=data,Dumper=yaml.CDumper))
         #logger.success("Config file created successfully, please fill in the configuration information and restart the program.")
         logger.success("配置文件创建成功，请填写配置信息后重启程序。")
+        if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
+            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
         sys.exit()
+        
     except Exception as e:
         #logger.error("Failed to create config file, please check the permissions.")
         logger.error(f"创建配置文件失败，请检查权限。\n{e}")
