@@ -26,7 +26,8 @@ if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is
         #logger.error("Failed to create config file, please check the permissions.")
         logger.error(f"创建配置文件失败，请检查权限。\n{e}")
         sys.exit()
-else:
+
+def check_config():
     #检查配置文件填写是否正确
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
@@ -64,7 +65,8 @@ else:
             #logger.error("RSS_SECOND is not configured, please fill in the configuration information and restart the program.")
             logger.error("RSS_SECOND未配置,请填写配置信息后重启程序。")
             sys.exit()
-    else:
-        #logger.success("Configuration detection passed!")
-        logger.success("配置检测通过!")
-        pass
+    
+    logger.success("配置检测通过!")
+
+if __name__ == "__main__":
+    check_config()

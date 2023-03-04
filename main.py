@@ -13,6 +13,7 @@ import telebot
 import time
 import twtter
 
+initialize.check_config()
 
 try:
     with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
@@ -87,6 +88,7 @@ def run_schedule():
 #调试用
 #rss_push()
 if config["RSS_OPEN"] == True:
+    logger.info("RSS推送已开启")
     schedule_thread = threading.Thread(target=run_schedule)
     schedule_thread.start()
 
