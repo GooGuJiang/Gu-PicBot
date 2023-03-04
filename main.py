@@ -51,7 +51,7 @@ def rss_push():
                         #print(img_path)
                         if img_path is not None:
                             push_text = f'''
-<b>{img_path["title"]}</b>\n
+<b>{img_path["title"]}</b>
 作品 ID: <code>{img_path["id"]}</code>
 作者: <a href="{img_path["anthor_url"]}">{img_path["author"]}</a>
 链接: <a href="{img_path["page_url"]}">🔗链接地址</a>
