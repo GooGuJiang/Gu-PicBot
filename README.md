@@ -1,5 +1,5 @@
 <div align="center">
-<h1>✏咕谷の动漫图片下载BOT</h1>
+<h1>✏咕谷の插画下载BOT</h1>
 
 ![]( https://ggj.moe/wp-content/uploads/2023/03/botimg.webp  )
 
