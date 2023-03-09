@@ -3,14 +3,15 @@ import yaml
 import sys
 import os
 import sqlite3
-
+import time
+from loguru import logger
 
 #初始化目录
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv") is False:
     os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv")
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data")
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
+    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
 
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
     sys.exit()
@@ -20,19 +21,8 @@ else:
 
 PIXIV_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/pixiv"
 # Connect to the SQLite database
-PIXIV_DB = f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv_data/pixiv_images.db"
-if os.path.exists(PIXIV_DB) is False:
-    conn = sqlite3.connect(PIXIV_DB)
-    c = conn.cursor()
-    # Create the table to store image data (if it doesn't exist)
-    c.execute('''CREATE TABLE IF NOT EXISTS pixiv_images
-                (id INTEGER PRIMARY KEY,
-                pid INTEGER,
-                file_size INTEGER,
-                file_path TEXT)''')
-    conn.close()
-    
-# Define a function to insert image data into the database
+PIXIV_DB = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
+
 
 def get_folder_size(folder_path):
     total_size = 0
@@ -68,9 +58,21 @@ def is_pid_exist(pid):
 REFRESH_TOKEN = config['REFRESH_TOKEN']
 
 #初始化PixivPy
-api = AppPixivAPI()
-api.auth(refresh_token=REFRESH_TOKEN)
+#api = AppPixivAPI()
+def pixiv_load():
+    global api
+    logger.info(f"初始化Pixiv API")
+    while True:
+        try:
+            api = AppPixivAPI()
+            api.auth(refresh_token=REFRESH_TOKEN)
+            logger.info(f"初始化Pixiv API成功")
+            return None
+        except Exception as e:
+            logger.error(f"遇到 Cloudflare version 2 Captcha ，将尝试重新初始化PIXIV API")
+        time.sleep(1)    
 
+pixiv_load()
 
 def get_file_name(url,size):
     data ={
@@ -80,13 +82,22 @@ def get_file_name(url,size):
     #return f"{url.split('/')[-1].split('.')[0]}_{size}.{url.split('/')[-1].split('.')[1]}"
 
 def download_img(pixiv_id):
-    json_result = api.illust_detail(pixiv_id)
-    illust = json_result.illust
-    img_url = illust.meta_pages
+    #api.auth(refresh_token=REFRESH_TOKEN)
+    try:
+        json_result = api.illust_detail(pixiv_id)
+        illust = json_result.illust
+        img_url = illust.meta_pages
+    except Exception as e:
+        logger.error("遇到Pixiv API错误，尝试重新初始化API")
+        pixiv_load()
+        json_result = api.illust_detail(pixiv_id)
+        illust = json_result.illust
+        img_url = illust.meta_pages
     path_large =[]
     path_original =[]
     mkdir_gu = f"{PIXIV_PATH}/{illust.id}"
     #print(illust.meta_single_page)
+    #print(illust)
     if os.path.exists(mkdir_gu) is False:
         os.mkdir(mkdir_gu)
     if len(illust.meta_single_page) == 0:
@@ -135,7 +146,7 @@ def download_img(pixiv_id):
         insert_image_data(pixiv_id,f"{PIXIV_PATH}/{illust.id}")
         api.illust_bookmark_add(pixiv_id, restrict="public")
     except Exception as e:
-        pass
+        logger.error(e)
     return file_data
 
 def make_tags(tags):

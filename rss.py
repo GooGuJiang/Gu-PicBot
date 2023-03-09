@@ -8,10 +8,10 @@ if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is
     sys.exit()
 
 #初始化检测
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/rss_data") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/rss_data")
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
+    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
 
-DB_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/data/rss_data/pixiv_rss.db"
+DB_PATH = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
 
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
     sys.exit()
@@ -22,15 +22,6 @@ else:
 # 订阅源的URL
 RSS_URL = config["RSS_URL"]
 
-def create_table(conn):
-    # Create a table to store the RSS data
-    conn.execute('''CREATE TABLE IF NOT EXISTS rss_data
-                     (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      title TEXT,
-                      pid TEXT,
-                      link TEXT,
-                      UNIQUE(link))''')
-
 def get_pixiv_rlid(url):
     return url.split("/")[-1]
 
@@ -38,10 +29,6 @@ def get_pixiv_rss():
     # Connect to the SQLite database
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
-
-    # Create the RSS data table if it doesn't exist
-    create_table(conn)
-
     # Read existing article IDs from the database
     c.execute('SELECT link FROM rss_data')
     existing_articles = set(link for (link,) in c.fetchall())

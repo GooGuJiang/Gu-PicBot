@@ -1,22 +1,21 @@
 import initialize
 import traceback
-import yaml
 import os
 import sys
 import threading
 import time
 from loguru import logger
-from pixiv import download_img, make_tags,is_pid_exist
-from rss import get_pixiv_rss,pid_in_database
+from pixiv import download_img, make_tags
+from rss import get_pixiv_rss
 import telebot
 import time
 import twtter
+from gusql import pixiv_tg_id_add,twtter_tg_id_add,get_tg_pixiv_message_id,get_tg_message_id_by_twitter_id
 
-initialize.check_config()
+
 
 try:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
-        config = yaml.load(c.read(),Loader=yaml.CLoader)
+    config = initialize.check_config()
     bot = telebot.TeleBot(config["BOT_TOKEN"], parse_mode="html")
     if config['PROXY_OPEN'] == True:
         from telebot import apihelper
@@ -45,7 +44,7 @@ def rss_push():
             for rss in rss_list:
                 if rss is not None:
                     try:
-                        if is_pid_exist(rss[1]) is True:
+                        if get_tg_pixiv_message_id(rss[1]):
                             continue
                         img_path = download_img(rss[1])
                         #print(img_path)
@@ -56,10 +55,11 @@ def rss_push():
 作者: <a href="{img_path["anthor_url"]}">{img_path["author"]}</a>
 链接: <a href="{img_path["page_url"]}">🔗链接地址</a>
 标签: {make_tags(img_path["tags"])}
-        '''
+'''
                             with open(img_path["path_large"][0], 'rb') as img:
                                 push_data = bot.send_photo(config["CHANNEL_ID"], img, caption=f"{push_text}")
                                 logger.success(f"推送成功: {rss[1]}")
+                                pixiv_tg_id_add(push_data.message_id,img_path["id"])
                             for push_photo in img_path["path_original"]:
                                 if is_file_size_exceeds_limit(push_photo):
                                     continue
@@ -67,11 +67,13 @@ def rss_push():
                                     bot.send_document(config["CHANNEL_ID"], img, reply_to_message_id=push_data.message_id)
                         count_push += 1
                         if count_push >= 9:
-                            time.sleep(20)
+                            time.sleep(60)
                             count_push=0
                         else:
                             time.sleep(1)                                
-                                
+                        if config["FILE_DELETE"] == True:
+                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
+                                os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
                     except Exception as e:
                         logger.error(f"推送失败: {e}")
     except Exception as e:
@@ -99,8 +101,10 @@ def push_link(message):
         if message.from_user.id in config["BOT_ADMIN"]:
             if message.text.startswith("https://www.pixiv.net/artworks/"):
                 try:
-                    if is_pid_exist(message.text.split("/")[-1]) is True:
-                        bot.reply_to(message, "已经推送过了!")
+                    sql_get_gu = get_tg_pixiv_message_id(message.text.split("/")[-1])
+                    if sql_get_gu:
+                        message_tmmmpp = bot.forward_message(chat_id=message.chat.id,message_id=sql_get_gu,from_chat_id=config['CHANNEL_ID'])
+                        bot.send_message(message.chat.id, "已经推送过了!", reply_to_message_id=message_tmmmpp.message_id)
                         return None
                     temp = bot.reply_to(message, "正在推送中...")
                     img_path = download_img(message.text.split("/")[-1])
@@ -115,6 +119,7 @@ def push_link(message):
                         with open(img_path["path_large"][0], 'rb') as img:
                             push_data = bot.send_photo(config['CHANNEL_ID'], img, caption=f"{push_text}")
                             logger.success(f"推送成功: {message.text}")
+                            pixiv_tg_id_add(push_data.message_id,img_path["id"])
                         for push_photo in img_path["path_original"]:
                             if is_file_size_exceeds_limit(push_photo):
                                 continue
@@ -122,19 +127,21 @@ def push_link(message):
                                 bot.send_document(config['CHANNEL_ID'], img, reply_to_message_id=push_data.message_id)
                         bot.reply_to(message, "推送成功!")
                         bot.delete_message(message.chat.id, temp.message_id)
+                        if config["FILE_DELETE"] == True:
+                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
+                                os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
                         return None
                 except Exception as e:
                     logger.error(f"推送失败: {e}")
                     bot.reply_to(message, "推送失败,请查看日志!")
                     return None
-            get_tw_url = twtter.extract_tweet_id(message.text)
-            if get_tw_url["status"] is True:
-                dl_img = twtter.get_twtter_media(get_tw_url["id"])
-                if dl_img["status"] is False:
-                    bot.reply_to(message,"下载图片出错请重新尝试!")
-                    return None
             try:
                 get_tw_url = twtter.extract_tweet_id(message.text)
+                sql_get_gu = get_tg_message_id_by_twitter_id(message.text.split("/")[-1])
+                if sql_get_gu:
+                    message_tmmmpp = bot.forward_message(chat_id=message.chat.id,message_id=sql_get_gu,from_chat_id=config['CHANNEL_ID'])
+                    bot.send_message(message.chat.id, "已经推送过了!", reply_to_message_id=message_tmmmpp.message_id)
+                    return None
                 if get_tw_url["status"] is True:
                     tmp = bot.reply_to(message, "正在推送中...")
                     dl_img = twtter.get_twtter_media(get_tw_url["id"])
@@ -153,6 +160,7 @@ def push_link(message):
                     with open(dl_img["media_path"][0], 'rb') as img:
                         push_data = bot.send_photo(config['CHANNEL_ID'], img, caption=f"{push_text}")
                         logger.success(f"推送成功: {message.text}")
+                        twtter_tg_id_add(push_data.message_id,get_tw_url["id"])
                     for push_photo in dl_img["media_path"]:
                         if is_file_size_exceeds_limit(push_photo):
                             continue
@@ -160,6 +168,9 @@ def push_link(message):
                             bot.send_document(config['CHANNEL_ID'], img, reply_to_message_id=push_data.message_id)
                     bot.reply_to(message, "推送成功!")
                     bot.delete_message(message.chat.id, tmp.message_id)
+                    if config["FILE_DELETE"] == True:
+                        if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}'):
+                            os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}')
                     return None
             except Exception as e:
                 logger.error(f"推送失败: {e}")
@@ -177,7 +188,9 @@ if __name__ == '__main__':
             logger.success(f"启动成功!")
             bot.polling()
 
-        except Exception:
-            logger.error(f"遇到错误正在重启:")
+        except Exception as e:
+            logger.error(f"遇到错误正在重启:{e}")
             traceback.print_exc()
         time.sleep(1)
+
+        
