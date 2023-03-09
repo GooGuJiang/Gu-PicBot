@@ -1,6 +1,6 @@
-pyyaml
-pixivpy3
-feedparser
-schedule
-loguru
-pyTelegramBotAPI
+feedparser>=6.0.10
+loguru>=0.6.0
+PixivPy3>=3.7.2
+pyTelegramBotAPI>=4.10.0
+PyYAML>=6.0
+requests>=2.22.0
