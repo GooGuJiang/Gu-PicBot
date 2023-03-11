@@ -4,19 +4,16 @@ import os
 import sys
 import yaml
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
-    sys.exit()
-
 #初始化检测
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
     os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
 
 DB_PATH = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
+    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
 # 订阅源的URL

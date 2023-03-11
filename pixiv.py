@@ -7,19 +7,19 @@ import time
 from loguru import logger
 
 #初始化目录
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/pixiv")
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv") is False:
+    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv")
 
 if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
     os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
+    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
-PIXIV_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/pixiv"
+PIXIV_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv"
 # Connect to the SQLite database
 PIXIV_DB = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
 
@@ -57,6 +57,13 @@ def is_pid_exist(pid):
 
 REFRESH_TOKEN = config['REFRESH_TOKEN']
 
+if config['PROXY_OPEN'] == True:
+        proxy = {
+            "http": config['PROXY'],
+            "https": config['PROXY']
+        }
+else:
+    proxy = None
 #初始化PixivPy
 #api = AppPixivAPI()
 def pixiv_load():
@@ -64,7 +71,7 @@ def pixiv_load():
     logger.info(f"初始化Pixiv API")
     while True:
         try:
-            api = AppPixivAPI()
+            api = AppPixivAPI(proxies=proxy)
             api.auth(refresh_token=REFRESH_TOKEN)
             logger.info(f"初始化Pixiv API成功")
             return None

@@ -6,16 +6,18 @@ from loguru import logger
 import time
 import re
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/twtter") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/twtter")
+TWTTER_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/data/twtter"
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml") is False:
+if os.path.exists(TWTTER_PATH) is False:
+    os.mkdir(TWTTER_PATH)
+
+if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/config.yml","r") as c:
+    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
-TWTTER_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/twtter"
+
 
 if config['PROXY_OPEN'] == True:
         proxy = {

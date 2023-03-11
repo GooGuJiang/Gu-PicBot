@@ -72,8 +72,8 @@ def rss_push():
                         else:
                             time.sleep(1)                                
                         if config["FILE_DELETE"] == True:
-                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
-                                shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
+                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/data/pixiv/{img_path["id"]}'):
+                                shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/data/pixiv/{img_path["id"]}')
                     except Exception as e:
                         logger.error(f"推送失败: {e}")
     except Exception as e:
@@ -128,8 +128,8 @@ def push_link(message):
                         bot.reply_to(message, "推送成功!")
                         bot.delete_message(message.chat.id, temp.message_id)
                         if config["FILE_DELETE"] == True:
-                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
-                             	shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
+                            if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/data/pixiv/{img_path["id"]}'):
+                                shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/data/pixiv/{img_path["id"]}')
                         return None
                 except Exception as e:
                     logger.error(f"推送失败: {e}")
@@ -169,8 +169,8 @@ def push_link(message):
                     bot.reply_to(message, "推送成功!")
                     bot.delete_message(message.chat.id, tmp.message_id)
                     if config["FILE_DELETE"] == True:
-                        if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}'):
-                            shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}')
+                        if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/data/twitter/{get_tw_url["id"]}'):
+                            shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/data/twitter/{get_tw_url["id"]}')
                     return None
             except Exception as e:
                 logger.error(f"推送失败: {e}")

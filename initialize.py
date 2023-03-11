@@ -4,22 +4,22 @@ import yaml
 from loguru import logger
 from gusql import oneload_sql_db
 
-CONFIG_FILE = f"{os.path.dirname(os.path.abspath(__file__))}/config.yml"
+CONFIG_FILE = f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml"
 
 if os.path.exists(CONFIG_FILE) is False:
     try:
         data={
-            "REFRESH_TOKEN":"",
-            "RSS_URL":"",
-            "BOT_TOKEN":"",
-            "CHANNEL_ID":"",
-            "BOT_ADMIN":[""],
-            "RSS_SECOND":60,
-            "PROXY":"socks5://127.0.0.1:8089",
-            "PROXY_OPEN":False,
-            "RSS_OPEN":True,
-            "LOG_OPEN":True,
-            "FILE_DELETE":True
+            "REFRESH_TOKEN": os.getenv("REFRESH_TOKEN", ""),
+            "RSS_URL": os.getenv("RSS_URL", ""),
+            "BOT_TOKEN": os.getenv("BOT_TOKEN", ""),
+            "CHANNEL_ID": os.getenv("CHANNEL_ID", ""),
+            "BOT_ADMIN": os.getenv("BOT_ADMIN", [""]),
+            "RSS_SECOND": int(os.getenv("RSS_SECOND", 300)),
+            "PROXY": os.getenv("PROXY", "socks5://127.0.0.1:8089"),
+            "PROXY_OPEN": bool(os.getenv("PROXY_OPEN", False)),
+            "RSS_OPEN": bool(os.getenv("RSS_OPEN", True)),
+            "LOG_OPEN": bool(os.getenv("LOG_OPEN", True)),
+            "FILE_DELETE": bool(os.getenv("FILE_DELETE", True))
         }
         with open(CONFIG_FILE, "w+") as c:
             c.write(yaml.dump(data=data,Dumper=yaml.CDumper))
@@ -28,7 +28,12 @@ if os.path.exists(CONFIG_FILE) is False:
             logger.error("创建数据库失败，请检查权限。")
         else:
             logger.success("数据库创建成功。")
-        sys.exit()
+        #sys.exit()
+        if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
+            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
+        
+        if os.getenv("REFRESH_TOKEN", "") == "":
+            sys.exit()
         
     except Exception as e:
         logger.error(f"创建配置文件失败，请检查权限。\n{e}")
@@ -85,9 +90,9 @@ def check_config():
     
     if config['LOG_OPEN']:
         logger.success("日志记录功能已开启")
-        if not os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/log"):
-            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/log")
-        logger.add(os.path.dirname(os.path.abspath(__file__))+"/log/bot_log_{time}.log", rotation="10MB", encoding="utf-8", enqueue=True, compression="zip", retention="10 days") #日志文件
+        if not os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/log"):
+            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/log")
+        logger.add(os.path.dirname(os.path.abspath(__file__))+"/data/log/bot_log_{time}.log", rotation="10MB", encoding="utf-8", enqueue=True, compression="zip", retention="10 days") #日志文件
     
     logger.success("配置检测通过!")
     return config
