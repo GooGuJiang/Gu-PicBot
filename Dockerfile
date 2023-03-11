@@ -1,20 +1,20 @@
 FROM python:3.10
 
-# 设置环境变量
-# ENV PYTHONUNBUFFERED 1
-
-# 设置工作目录
 WORKDIR /
 
-# 将项目依赖拷贝到容器中
-COPY requirements.txt /
+COPY . /
 RUN pip install --no-cache-dir -r requirements.txt 
 
-# 将项目代码拷贝到容器中
-COPY . /
+# 设置环境变量
+ENV REFRESH_TOKEN=""
+ENV RSS_URL=""
+ENV BOT_TOKEN=""
+ENV CHANNEL_ID=""
+ENV RSS_SECOND=300
+ENV PROXY="socks5://127.0.0.1:8089"
+ENV PROXY_OPEN=False
+ENV RSS_OPEN=True
+ENV LOG_OPEN=True
+ENV FILE_DELETE=True
 
-# 配置系统变量
-ENV MY_VAR=value
-
-# 运行项目
 CMD ["python", "main.py"]
