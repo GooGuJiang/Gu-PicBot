@@ -11,7 +11,7 @@ CONFIG_FILE = f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/con
 
 def get_admin_id_path() -> list:
     gu_list = []
-    tmp_admin = os.getenv("BOT_ADMIN", [""])
+    tmp_admin = os.getenv("BOT_ADMIN", "")
     tmp_admin = tmp_admin.split(",")
     for i in tmp_admin:
         if i.isdigit():
@@ -112,4 +112,4 @@ def check_config():
     return config
 
 if __name__ == "__main__":
-    print(get_admin_id_path())
+    print(check_config())

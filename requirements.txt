@@ -4,3 +4,4 @@ PixivPy3>=3.7.2
 pyTelegramBotAPI>=4.10.0
 PyYAML>=6.0
 requests>=2.22.0
+PySocks

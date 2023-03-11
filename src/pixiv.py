@@ -70,6 +70,7 @@ else:
 #api = AppPixivAPI()
 def pixiv_load():
     global api
+    error_count = 0
     logger.info(f"初始化Pixiv API")
     while True:
         try:
@@ -78,7 +79,10 @@ def pixiv_load():
             logger.info(f"初始化Pixiv API成功")
             return None
         except Exception as e:
-            logger.error(f"遇到 Cloudflare version 2 Captcha ，将尝试重新初始化PIXIV API")
+            logger.error(f"遇到 {e}\n将尝试重新初始化PIXIV API")
+            error_count += 1
+            if error_count == 10:
+                return None
         time.sleep(1)    
 
 pixiv_load()
