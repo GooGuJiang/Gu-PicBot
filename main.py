@@ -11,7 +11,7 @@ import telebot
 import time
 import twtter
 from gusql import pixiv_tg_id_add,twtter_tg_id_add,get_tg_pixiv_message_id,get_tg_message_id_by_twitter_id
-
+import shutil
 
 
 try:
@@ -73,7 +73,7 @@ def rss_push():
                             time.sleep(1)                                
                         if config["FILE_DELETE"] == True:
                             if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
-                                os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
+                                shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
                     except Exception as e:
                         logger.error(f"推送失败: {e}")
     except Exception as e:
@@ -115,7 +115,7 @@ def push_link(message):
 作者: <a href="{img_path["anthor_url"]}">{img_path["author"]}</a>
 链接: <a href="{img_path["page_url"]}">🔗链接地址</a>
 标签: {make_tags(img_path["tags"])}
-                        ''' 
+'''
                         with open(img_path["path_large"][0], 'rb') as img:
                             push_data = bot.send_photo(config['CHANNEL_ID'], img, caption=f"{push_text}")
                             logger.success(f"推送成功: {message.text}")
@@ -129,7 +129,7 @@ def push_link(message):
                         bot.delete_message(message.chat.id, temp.message_id)
                         if config["FILE_DELETE"] == True:
                             if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}'):
-                                os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
+                             	shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/pixiv/{img_path["id"]}')
                         return None
                 except Exception as e:
                     logger.error(f"推送失败: {e}")
@@ -170,7 +170,7 @@ def push_link(message):
                     bot.delete_message(message.chat.id, tmp.message_id)
                     if config["FILE_DELETE"] == True:
                         if os.path.exists(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}'):
-                            os.remove(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}')
+                            shutil.rmtree(f'{os.path.dirname(os.path.abspath(__file__))}/twitter/{get_tw_url["id"]}')
                     return None
             except Exception as e:
                 logger.error(f"推送失败: {e}")
