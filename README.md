@@ -11,7 +11,40 @@
 - 解析Pixiv链接并推送
 - 解析Twtter链接并推送
 
-## 🤔如何配置
+## 🤔快速开始
+
+### <img src="https://user-images.githubusercontent.com/511499/117447182-29758200-af0b-11eb-97bd-58723fee62ab.png" alt="Docker" height="28px" align="top"/>Docker
+
+拉取 Docker 镜像
+
+```bash
+$ docker pull googujiang/gu-picbot
+```
+
+创建机器人数据文件夹
+```bash
+$ mkdir ~/gu-picbot
+```
+
+创建并运行容器
+
+```bash
+$ docker run --name gu-picbot \
+    -v ~/gu-picbot:/data \
+    -e CHANNEL_ID=<channel_id> \
+    -e BOT_TOKEN=<bot_token> \
+    -e RSS_URL=<rss_url> \
+    -e REFRESH_TOKEN=<refresh_token> \
+    -e BOT_ADMIN=<bot_admin> \
+    -d googujiang/gu-picbot
+```
+
+注意：
+* `<channel_id>` `<bot_token>` `<rss_url>` `<refresh_token>`请参考下面 `❤️配置说明` 填写
+
+* `BOT_ADMIN` 多个管理员请使用 `,` 分割 
+
+### 普通方式
 
 1. 确保 `python` 的版本为 `>=3.6.*` 以上
 
@@ -60,7 +93,8 @@ $ python3 main.py
 | RSS\_SECOND | RSS更新检查的时间间隔（单位：秒） |
 | PROXY | 代理服务器的URL |
 | PROXY\_OPEN | 是否启用代理服务器 |
-| RSS\_OPEN | 是否启用RSS订阅功能 |
+| LOG\_OPEN | 是否启用日志记录功能 |
+| FILE\_DELETE | 是否启用下载后删除文件 |
 
 注意事项：
 
@@ -69,11 +103,6 @@ $ python3 main.py
 *   PROXY和PROXY\_OPEN参数用于启用和配置代理服务器，可选。
 *   BOT\_ADMIN参数用于配置机器人管理员，机器人管理员具有特殊权限，可对机器人进行管理操作。
 *   参数的值必须使用双引号包含起来，且必须与参数名之间用等号连接。
-
-
-## 🆕更多部署方式
-
-目前只有部署在Linux和Windows平台，Docker等部署方式后续添加。
 
 ## ⁉️已知问题
 
