@@ -8,6 +8,17 @@ current_dir = os.path.abspath(os.path.dirname(__file__))
 
 CONFIG_FILE = f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml"
 
+
+def get_admin_id_path() -> list:
+    gu_list = []
+    tmp_admin = os.getenv("BOT_ADMIN", [""])
+    tmp_admin = tmp_admin.split(",")
+    for i in tmp_admin:
+        if i.isdigit():
+            gu_list.append(int(i))
+    return  gu_list
+
+
 if os.path.exists(CONFIG_FILE) is False:
     try:
         if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data") is False:
@@ -17,7 +28,7 @@ if os.path.exists(CONFIG_FILE) is False:
             "RSS_URL": os.getenv("RSS_URL", ""),
             "BOT_TOKEN": os.getenv("BOT_TOKEN", ""),
             "CHANNEL_ID": os.getenv("CHANNEL_ID", ""),
-            "BOT_ADMIN": os.getenv("BOT_ADMIN", [""]),
+            "BOT_ADMIN": get_admin_id_path() or [""],
             "RSS_SECOND": int(os.getenv("RSS_SECOND", 300)),
             "PROXY": os.getenv("PROXY", "socks5://127.0.0.1:8089"),
             "PROXY_OPEN": bool(os.getenv("PROXY_OPEN", False)),
@@ -35,7 +46,7 @@ if os.path.exists(CONFIG_FILE) is False:
         #sys.exit()
         
         
-        if os.getenv("REFRESH_TOKEN", "") == "":
+        if os.getenv("BOT_TOKEN", "") == "":
             sys.exit()
         
     except Exception as e:
@@ -61,7 +72,7 @@ def check_config():
     config['RSS_URL'] = get_environment_variable("RSS_URL") or config['RSS_URL']
     config['BOT_TOKEN'] = get_environment_variable("BOT_TOKEN") or config['BOT_TOKEN']
     config['CHANNEL_ID'] = get_environment_variable("CHANNEL_ID") or config['CHANNEL_ID']
-    config['BOT_ADMIN'] = get_environment_variable("BOT_ADMIN") or config['BOT_ADMIN']
+    config['BOT_ADMIN'] = get_admin_id_path() or config['BOT_ADMIN']
     config['PROXY_OPEN'] = bool(get_environment_variable("PROXY_OPEN") or config['PROXY_OPEN'])
     config['PROXY'] = get_environment_variable("PROXY") or config['PROXY']
     config['RSS_OPEN'] = bool(get_environment_variable("RSS_OPEN") or config['RSS_OPEN'])
@@ -101,4 +112,4 @@ def check_config():
     return config
 
 if __name__ == "__main__":
-    print(check_config())
+    print(get_admin_id_path())
