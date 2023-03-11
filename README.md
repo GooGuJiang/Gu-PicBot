@@ -39,7 +39,7 @@ $ docker run --name gu-picbot \
 ```
 
 **注意：**
-* `<channel_id>` `<bot_token>` `<rss_url>` `<refresh_token>`请参考下面 [❤️ 配置说明](##%EF%B8%8F-配置说明) 填写
+* `<channel_id>` `<bot_token>` `<rss_url>` `<refresh_token>`请参考下面 [❤️ 配置说明](#%EF%B8%8F-配置说明) 填写
 
 * `BOT_ADMIN` 多个管理员请使用 `,` 分割 
 
