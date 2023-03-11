@@ -1,12 +1,14 @@
 import sqlite3
 import os
 
-DATA_DB =f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
+DATA_DB =f'{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/bot_data.db'
 
 def oneload_sql_db():
     try:
-        if not os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data"):
-            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
+        if not os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data"):
+            os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data")
 
         conn = sqlite3.connect(DATA_DB)
         c = conn.cursor()

@@ -6,15 +6,18 @@ from loguru import logger
 import time
 import re
 
-TWTTER_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/data/twtter"
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
+
+TWTTER_PATH = f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/twtter"
 
 if os.path.exists(TWTTER_PATH) is False:
     os.mkdir(TWTTER_PATH)
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
+    with open(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
 

@@ -4,16 +4,18 @@ import os
 import sys
 import yaml
 
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
 #初始化检测
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data") is False:
+    os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data")
 
-DB_PATH = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
+DB_PATH = f'{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/bot_data.db'
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
+    with open(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
 # 订阅源的URL

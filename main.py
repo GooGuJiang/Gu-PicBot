@@ -1,16 +1,16 @@
-import initialize
+import src.initialize as initialize
 import traceback
 import os
 import sys
 import threading
 import time
 from loguru import logger
-from pixiv import download_img, make_tags
-from rss import get_pixiv_rss
+from src.pixiv import download_img, make_tags
+from src.rss import get_pixiv_rss
 import telebot
 import time
-import twtter
-from gusql import pixiv_tg_id_add,twtter_tg_id_add,get_tg_pixiv_message_id,get_tg_message_id_by_twitter_id
+import src.twtter as twtter
+from src.gusql import pixiv_tg_id_add,twtter_tg_id_add,get_tg_pixiv_message_id,get_tg_message_id_by_twitter_id
 import shutil
 
 

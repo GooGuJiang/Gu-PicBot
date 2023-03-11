@@ -2,12 +2,16 @@ import os
 import sys
 import yaml
 from loguru import logger
-from gusql import oneload_sql_db
+from .gusql import oneload_sql_db
 
-CONFIG_FILE = f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml"
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
+CONFIG_FILE = f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml"
 
 if os.path.exists(CONFIG_FILE) is False:
     try:
+        if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data") is False:
+            os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data")
         data={
             "REFRESH_TOKEN": os.getenv("REFRESH_TOKEN", ""),
             "RSS_URL": os.getenv("RSS_URL", ""),
@@ -29,8 +33,7 @@ if os.path.exists(CONFIG_FILE) is False:
         else:
             logger.success("数据库创建成功。")
         #sys.exit()
-        if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
-            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
+        
         
         if os.getenv("REFRESH_TOKEN", "") == "":
             sys.exit()
@@ -90,9 +93,9 @@ def check_config():
     
     if config['LOG_OPEN']:
         logger.success("日志记录功能已开启")
-        if not os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/log"):
-            os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/log")
-        logger.add(os.path.dirname(os.path.abspath(__file__))+"/data/log/bot_log_{time}.log", rotation="10MB", encoding="utf-8", enqueue=True, compression="zip", retention="10 days") #日志文件
+        if not os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/log"):
+            os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/log")
+        logger.add(os.path.abspath(os.path.join(current_dir, os.pardir))+"/data/log/bot_log_{time}.log", rotation="10MB", encoding="utf-8", enqueue=True, compression="zip", retention="10 days") #日志文件
     
     logger.success("配置检测通过!")
     return config

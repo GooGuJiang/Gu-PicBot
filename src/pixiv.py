@@ -6,22 +6,24 @@ import sqlite3
 import time
 from loguru import logger
 
+current_dir = os.path.abspath(os.path.dirname(__file__))
+
 #初始化目录
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv")
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/pixiv") is False:
+    os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/pixiv")
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data") is False:
-    os.mkdir(f"{os.path.dirname(os.path.abspath(__file__))}/data")
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data") is False:
+    os.mkdir(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data")
 
-if os.path.exists(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml") is False:
+if os.path.exists(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml") is False:
     sys.exit()
 else:
-    with open(f"{os.path.dirname(os.path.abspath(__file__))}/data/config.yml","r") as c:
+    with open(f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/config.yml","r") as c:
         config = yaml.load(c.read(),Loader=yaml.CLoader)
 
-PIXIV_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/data/pixiv"
+PIXIV_PATH = f"{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/pixiv"
 # Connect to the SQLite database
-PIXIV_DB = f'{os.path.dirname(os.path.abspath(__file__))}/data/bot_data.db'
+PIXIV_DB = f'{os.path.abspath(os.path.join(current_dir, os.pardir))}/data/bot_data.db'
 
 
 def get_folder_size(folder_path):
