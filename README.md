@@ -1,32 +1,31 @@
 <div align="center">
-<h1>✏咕谷の插画下载BOT</h1>
+  <h1>✏咕谷の插画下载BOT</h1>
+  <p>✏ 一个可以下载Pixiv和Twitter的图片并上传到Telegram频道的机器人</p>
 
-![]( https://ggj.moe/wp-content/uploads/2023/03/botimg.webp  )
-
-<p>✏ 可以下载来自Pixiv和Twitter的图片，并将它们上传到Telegram频道。</p>
+  ![](https://ggj.moe/wp-content/uploads/2023/03/botimg.webp)
 </div>
 
-## 😀具有以下功能
+## 😀 具有以下功能
 - 基于RssHub订阅Pixiv收藏并推送
 - 解析Pixiv链接并推送
 - 解析Twtter链接并推送
 
-## 🤔快速开始
+## 🤔 快速开始
 
-### <img src="https://user-images.githubusercontent.com/511499/117447182-29758200-af0b-11eb-97bd-58723fee62ab.png" alt="Docker" height="28px" align="top"/>Docker
+### <img src="https://user-images.githubusercontent.com/511499/117447182-29758200-af0b-11eb-97bd-58723fee62ab.png" alt="Docker" height="28px" align="top"/> Docker
 
-拉取 Docker 镜像
+1. 拉取 Docker 镜像
 
 ```bash
 $ docker pull googujiang/gu-picbot
 ```
 
-创建机器人数据文件夹
+2. 创建机器人数据文件夹
 ```bash
 $ mkdir ~/gu-picbot
 ```
 
-创建并运行容器
+3. 创建并运行容器
 
 ```bash
 $ docker run --name gu-picbot \
@@ -39,8 +38,8 @@ $ docker run --name gu-picbot \
     -d googujiang/gu-picbot
 ```
 
-注意：
-* `<channel_id>` `<bot_token>` `<rss_url>` `<refresh_token>`请参考下面 `❤️配置说明` 填写
+**注意：**
+* `<channel_id>` `<bot_token>` `<rss_url>` `<refresh_token>`请参考下面 [❤️ 配置说明](#%EF%B8%8F-配置说明) 填写
 
 * `BOT_ADMIN` 多个管理员请使用 `,` 分割 
 
@@ -60,26 +59,20 @@ $ git clone https://github.com/GooGuJiang/Gu-Random-Image.git
 $ pip install -r requirements.txt
 ```
 
-4. 初始化
+4.填写配置文件
+
+
+5.运行
 
 ```bash
 $ python3 main.py
 ```
 
-5.填写配置文件
-
-
-6.运行
-
-```bash
-$ python3 main.py
-```
-
-## 🤖命令列表
+## 🤖 命令列表
 
 目前只能解析Pixiv和Twtter链接，更多功能陆续添加。
 
-## ❤️配置说明
+## ❤️ 配置说明
 
 以下是配置参数的详细说明：
 
@@ -104,7 +97,7 @@ $ python3 main.py
 *   BOT\_ADMIN参数用于配置机器人管理员，机器人管理员具有特殊权限，可对机器人进行管理操作。
 *   参数的值必须使用双引号包含起来，且必须与参数名之间用等号连接。
 
-## ⁉️已知问题
+## ⁉️ 已知问题
 
 <details> 
 <summary> 
