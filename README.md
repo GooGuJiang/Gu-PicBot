@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>✏ Gu-Gu's Illustration Downloading BOT</h1>
+  <h1>✏ GooGu's Illustration Downloading BOT</h1>
   <p>✏ A Telegram bot that can download images from Pixiv and Twitter and upload them to Telegram channels.</p>
 
   ![](https://ggj.moe/wp-content/uploads/2023/03/botimg.webp)
