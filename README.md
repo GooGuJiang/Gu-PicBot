@@ -3,6 +3,7 @@
   <p>✏ A Telegram bot that can download images from Pixiv and Twitter and upload them to Telegram channels.</p>
 
   ![](https://ggj.moe/wp-content/uploads/2023/03/botimg.webp)
+  [English](README.md) | [简体中文](README.zh-CN.md)
 </div>
 
 ## 😀 Features
