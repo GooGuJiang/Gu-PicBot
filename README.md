@@ -64,7 +64,7 @@ $ pip install -r requirements.txt
 $ python3 main.py
 ```
 
-5 Fill in the configuration file.
+5. Fill in the configuration file.
 
 6. Run:
 
