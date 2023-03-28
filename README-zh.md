@@ -78,7 +78,7 @@ $ python3 main.py
 
 | 参数名 | 描述 |
 | --- | --- |
-| REFRESH\_TOKEN | 用于获取新的access\_token的刷新令牌 |
+| REFRESH\_TOKEN | 用登陆Pixiv的刷新令牌 |
 | RSS\_URL | RSS订阅的URL |
 | BOT\_TOKEN | Telegram机器人Token |
 | CHANNEL\_ID | 发送消息的频道或群组的唯一标识符 |
