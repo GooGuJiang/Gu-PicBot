@@ -86,7 +86,7 @@ Here is a detailed description of the configuration parameters:
 
 | Parameter | Description |
 | --- | --- |
-| REFRESH\_TOKEN | The refresh token used to obtain a new access token |
+| REFRESH\_TOKEN | The Refresh token with Pixiv login |
 | RSS\_URL | The URL of the RSS subscription |
 | BOT\_TOKEN | The Telegram bot token |
 | CHANNEL\_ID | The unique identifier of the channel or group to send messages |
